@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+	  <title>Animeiat.tv Filter</title>
+	      <style type="text/css">
+                 /* General styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui;
+  margin: 0;
+  padding: 0;
+  background-color: #f7f7f7;
+  padding-top: 30px;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+button {
+  background-color: #3368ff;
+  color: white;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  height: 100%;
+  display: none;
+  padding-top: 80px;
+}
+
+.popup-content {
+  background-color: white;
+  margin: auto;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 500px;
+  max-height: 80%;
+  overflow-y: auto;
+  text-align: center;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+@media only screen and (min-width: 768px) { /* Apply styles for screens larger than 768px */
+  input[type="text"] {
+    width: 70%;
+    margin-right: 15px;
+    margin-bottom: 0;
+  }
+
+  label {
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 0;
+  }
+
+  button {
+    margin-bottom: 0;
+  }
+} 
+    </style>
+</head>
+<body>
+	  <div style="text-align: center;">
+	<h1>animeiat.tv/watch/.../{Filter server}</h1>
+		<label for="html-code">Enter View Page Source HTML code:</label><br>
+		<textarea id="html-code" name="html-code" rows="3" cols="150" placeholder="<!DOCTYPE html>"></textarea><br>
+		<button type="button" onclick="filterHtml()">Filter HTML</button>
+		<br><br>
+		<label for="filtered-html">Filtered HTML:</label><br>
+		<textarea id="filtered-html" name="filtered-html" rows="1" cols="150" placeholder="view-source:https://www.animeiat.tv/player/....." readonly></textarea><br>
+		<button onclick="copyResult()">Copy</button><br><br>
+		<label for="input">Enter View Page Source HTML code:</label><br>
+        <textarea id="input" rows="3" cols="150" placeholder="<!DOCTYPE html>"></textarea><br>
+        <button onclick="filterSource()">Filter HTML</button><br><br>
+        <label for="output">Filtered HTML:</label><br>
+        <textarea id="output" rows="4" cols="150" placeholder="https://shahidha.net/files/.../.../.mp4" readonly></textarea><br>
+        <button onclick="copy()">Copy</button>
+        <button onclick="reset()">Reset</button><br><br>
+        </div>
+
+
+	<script>
+		function filterHtml() {
+			var htmlCode = document.getElementById("html-code").value;
+			var regex = /<iframe src="([^"]*)"/g;
+			var filteredHtml = '';
+			var match = regex.exec(htmlCode);
+			while (match != null) {
+				filteredHtml += match[1] + '\n';
+				match = regex.exec(htmlCode);
+			}
+			document.getElementById("filtered-html").value = `view-source:${filteredHtml}`;
+		}
+	</script>
+
+	<script>
+		function copyResult() {
+        // Copy the modified output from the filtered-html textarea to the clipboard
+        var modifiedTextarea = document.getElementById("filtered-html");
+        modifiedTextarea.select();
+        document.execCommand("copy");
+      }
+
+      function copy() {
+        // Copy the modified output from the filtered-html textarea to the clipboard
+        var modifiedTextarea = document.getElementById("output");
+        modifiedTextarea.select();
+        document.execCommand("copy");
+      }
+	</script>
+
+	<script>
+      function filterSource() {
+        const input = document.getElementById("input").value;
+        const regex = /src="(.*?.mp4)"/g;
+        const matches = [];
+        let match;
+
+        while (match = regex.exec(input)) {
+          matches.push(match[1]);
+          
+        }
+
+        const output = document.getElementById("output");
+        output.value = matches.join("\n");
+      }
+    </script>
+
+    <script>
+      function reset() {
+      document.getElementById("html-code").value = "";
+      document.getElementById("filtered-html").value = "";
+      document.getElementById("input").value = "";
+      document.getElementById("output").value = "";
+    }
+    </script>
+</body>
+</html>
